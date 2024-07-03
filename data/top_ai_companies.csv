@@ -1,0 +1,11 @@
+Company,Headquarters,Founded,Company Size,Key Products,Market Cap(as of March 2024)
+0,OpenAI,San Francisco-CA-USA,2015,200-500 employees,GPT-4-ChatGPT-DALL-E 3-Sora,Private company valued at $80 billion+
+1,Microsoft,Redmond-WA-USA,1975,220000+ employees,Microsoft Copilot-Copilot for Microsoft 365-Microsoft Copilot Studio-Microsoft Copilot in Bing,$3.01 trillion
+2,Alphabet (Google),Mountain View-CA-USA,1998,180000+ employees,Gemini-Vertex AI-Gemini for Google Workspace,$1.72 trillion
+3,Amazon (AWS),Seattle-WA-USA,1994,1.5 million+ employees,Amazon Bedrock-Amazon Q-Amazon CodeWhisperer-Amazon SageMaker,$1.79 trillion
+4,NVIDIA,Santa Clara-CA-USA,1993,29000+ employees,NVIDIA AI-NVIDIA NeMo-NVIDIA BioNeMo-NVIDIA Picasso-various chips and GPUs,$2.14 trillion
+5,Anthropic,San Francisco-CA-USA,2021	50-300 employees,Claude 3-Claude API,Private company valued at $15 billion
+6,Cohere,Toronto-ON-Canada,2019,50-300 employees,Command-Embed-Chat-Generate-Semantic Search,Private company valued at $2.2 billion
+7,Glean,Palo Alto-CA-USA,2019	200-500 employees,Glean-Glean Chat-Glean Assistant,Private company valued at $2.2 billion
+8,Jasper,Austin-TX-USA,2020,50-200 employees,Jasper-Jasper API-Jasper AI Copilot,Private company valued at $1.2 billion
+9,Hugging Face,Brooklyn-NY-USA,2016,100-300 employees,BLOOM-AutoTrain-Inference Endpoints,Private company valued at $4.5 billion
