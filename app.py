@@ -85,6 +85,7 @@ graph2 = dcc.Graph(figure=fig2)
 
 # Create Dash app
 app = dash.Dash()
+server = app.server
 app.layout = html.Div([
     html.H1('GRAPHS', style={'textAlign': 'center', 'color': '#636EFA'}),
     graph1,
@@ -92,4 +93,4 @@ app.layout = html.Div([
 ])
 
 if __name__ == '__main__':
-    app.run_server(port=8050)
+    app.run_server(debug = True)
