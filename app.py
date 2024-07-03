@@ -4,6 +4,7 @@ from dash import dcc, html
 import plotly.express as px
 import numpy as np
 
+
 # Read CSV files
 account_share = pd.read_csv("./data/company_shares_in_south_africa.csv")
 investment = pd.read_csv("./data/global_investments.csv")
