@@ -44,6 +44,8 @@ cleaned_topcompanies.to_csv("./data/cleaned_topcompanies.csv", index=False)
 outsourcing.loc[2, 'insource'] = '23%'
 outsourcing_fixed = outsourcing.fillna('77%')
 outsourcing_fixed.to_csv('./data/fixed_outsourcing.csv', index=False)
+forecasting_ai_melted = pd.melt(forecasting_ai, id_vars=['Area'], var_name='Year', value_name='GenAI Value')
+forecasting_ai_melted = forecasting_ai_melted.drop('Area', axis=1)
 
 # Create figures
 fig1 = px.bar(outsourcing_fixed, x="area", y="insource", title="Insourcing in each area")
@@ -78,19 +80,74 @@ fig16 = px.bar(account_share, x='brand', y='sharepercentage', title='Percentage 
 # Random colors for brands
 brand_colors = {brand: f'rgba({np.random.randint(0, 256)}, {np.random.randint(0, 256)}, {np.random.randint(0, 256)}, 0.8)' for brand in account_share['brand'].unique()}
 fig17 = px.bar(account_share[account_share['market'].isin(['generative AI(text)', 'generative AI(image)'])], x='brand', y='sharepercentage', title='Share Percentage of Brands that are working with AI in South Africa', color='brand', color_discrete_map=brand_colors, range_y=[0, 80], text="sharepercentage")
+fig18 = px.treemap(
+    account_share,
+    path=['market', 'brand'],
+    values='sharepercentage',
+    color='market',
+    color_discrete_map={'it services': '#636EFA', 'generative AI(text)': '#EF553B', 'generative AI(image)': '#00CC96'},
+    title='Market Share by Brand and Market Segment',
+    hover_data = ['sharepercentage']
+)
+# Configure text display
+fig18.update_traces(hovertemplate="<br>Share: %{value}%<br>")
+# Adjust margins
+fig18.update_layout(margin=dict(t=50, l=25, r=25, b=25))
+fig19 = px.bar(forecasting_ai_melted, x = 'Year', y = 'GenAI Value')
 
-# DCC components
-graph1 = dcc.Graph(figure=fig1)
-graph2 = dcc.Graph(figure=fig2)
+# # DCC components
+# graph1 = dcc.Graph(figure=fig19)
+# graph2 = dcc.Graph(figure=fig18)
 
-# Create Dash app
+# # Create Dash app
+# app = dash.Dash()
+# server = app.server
+# app.layout = html.Div([
+#     html.H1('GRAPHS', style={'textAlign': 'center', 'color': '#636EFA'}),
+#     graph1,
+#     graph2
+# ])
+
+# if __name__ == '__main__':
+#     app.run_server(debug = True)
+
 app = dash.Dash()
 server = app.server
+
+
 app.layout = html.Div([
     html.H1('GRAPHS', style={'textAlign': 'center', 'color': '#636EFA'}),
-    graph1,
-    graph2
+    html.Hr(),
+    
+    html.H2('Outsourcing'),
+    dcc.Graph(figure=fig1),
+    dcc.Graph(figure=fig2),
+    dcc.Graph(figure=fig3),
+    
+    html.Hr(),
+    
+    html.H2('Revenue Forecast'),
+    dcc.Graph(figure=fig8),
+    dcc.Graph(figure=fig9),
+    dcc.Graph(figure=fig10),
+    
+    html.Hr(),
+    
+    html.H2('Top AI Companies'),
+    dcc.Graph(figure=fig14),
+    dcc.Graph(figure=fig15),
+    dcc.Graph(figure=fig16),
+    
+    html.Hr(),
+    
+    html.H2('Market Share'),
+    dcc.Graph(figure=fig17),
+    dcc.Graph(figure=fig18),
+    
+    html.Hr(),
+    
+    html.H2('Generative AI Forecast'),
+    dcc.Graph(figure=fig19)
 ])
-
 if __name__ == '__main__':
     app.run_server(debug = True)
