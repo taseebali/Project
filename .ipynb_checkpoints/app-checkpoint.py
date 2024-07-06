@@ -93,20 +93,61 @@ fig18 = px.treemap(
 fig18.update_traces(hovertemplate="<br>Share: %{value}%<br>")
 # Adjust margins
 fig18.update_layout(margin=dict(t=50, l=25, r=25, b=25))
-fig19 = px.bar(forecasting_ai_melted, x = 'Year', y = 'GenAI Value')
+fig19 = px.bar(forecasting_ai_melted, x = 'Year', y = 'GenAI Value', text = 'GenAI Value')
 
-# DCC components
-graph1 = dcc.Graph(figure=fig19)
-graph2 = dcc.Graph(figure=fig28)
+# # DCC components
+# graph1 = dcc.Graph(figure=fig19)
+# graph2 = dcc.Graph(figure=fig18)
 
-# Create Dash app
+# # Create Dash app
+# app = dash.Dash()
+# server = app.server
+# app.layout = html.Div([
+#     html.H1('GRAPHS', style={'textAlign': 'center', 'color': '#636EFA'}),
+#     graph1,
+#     graph2
+# ])
+
+# if __name__ == '__main__':
+#     app.run_server(debug = True)
+
 app = dash.Dash()
 server = app.server
+
+
 app.layout = html.Div([
     html.H1('GRAPHS', style={'textAlign': 'center', 'color': '#636EFA'}),
-    graph1,
-    graph2
+    html.Hr(),
+    
+    html.H2('Outsourcing'),
+    dcc.Graph(figure=fig1),
+    dcc.Graph(figure=fig2),
+    dcc.Graph(figure=fig3),
+    
+    html.Hr(),
+    
+    html.H2('Revenue Forecast'),
+    dcc.Graph(figure=fig8),
+    dcc.Graph(figure=fig9),
+    dcc.Graph(figure=fig10),
+    
+    html.Hr(),
+    
+    html.H2('Top AI Companies'),
+    dcc.Graph(figure=fig14),
+    dcc.Graph(figure=fig15),
+    dcc.Graph(figure=fig16),
+    
+    html.Hr(),
+    
+    html.H2('Market Share'),
+    dcc.Graph(figure=fig17),
+    dcc.Graph(figure=fig18),
+    
+    html.Hr(),
+    
+    html.H2('Generative AI Forecast'),
+    dcc.Graph(figure=fig19)
 ])
-
 if __name__ == '__main__':
     app.run_server(debug = True)

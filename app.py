@@ -30,14 +30,14 @@ simplified_investment = investment.drop(columns=['total_investment'])
 simplified_investment.to_csv("./data/simplified_global_investment.csv", index=False)
 
 # Lowercase column names
-outsourcing.columns = outsourcing.columns.str.lower()
+outsourcing.columns = outsourcing.columns.str.lower()#Brand >> brand
 revenue_forecast.columns = revenue_forecast.columns.str.lower()
 topcompanies.columns = topcompanies.columns.str.lower()
-topcompanies.columns = topcompanies.columns.str.replace(' ', '_')
+topcompanies.columns = topcompanies.columns.str.replace(' ', '_')#Market Value >> marketvalue
 
 # Rename and clean topcompanies
 topcompanies.rename(columns={'market_cap(as_of_march_2024)': 'market_cap_march2024'}, inplace=True)
-cleaned_topcompanies = topcompanies.dropna()
+cleaned_topcompanies = topcompanies.dropna()# dropping null values
 cleaned_topcompanies.to_csv("./data/cleaned_topcompanies.csv", index=False)
 
 # Fix null values in outsourcing
@@ -73,7 +73,6 @@ fig12 = px.line(rf_pivoted, x="years", y=["itadministrationoutsourcing", "itappl
 fig13 = px.scatter(rf_pivoted, x="years", y=["itadministrationoutsourcing", "itapplicationoutsourcing", "itotheritoutsourcing", "itwebhosting"])
 
 # Other figures
-fig14 = px.bar(cleaned_topcompanies, x="company", y="market_cap_march2024", title="Market cap of Top AI Companies (As of March 2024)")
 fig15 = px.bar(simplified_investment, x="year", y="total_investment(in Millions)", title="Total Investment each year (in millions)", text="total_investment(in Millions)")
 fig16 = px.bar(account_share, x='brand', y='sharepercentage', title='Percentage Share of brands in South Africa', range_y=[0, 80], text="sharepercentage")
 
@@ -93,7 +92,7 @@ fig18 = px.treemap(
 fig18.update_traces(hovertemplate="<br>Share: %{value}%<br>")
 # Adjust margins
 fig18.update_layout(margin=dict(t=50, l=25, r=25, b=25))
-fig19 = px.bar(forecasting_ai_melted, x = 'Year', y = 'GenAI Value')
+fig19 = px.bar(forecasting_ai_melted, x = 'Year', y = 'GenAI Value', text = 'GenAI Value')
 
 # # DCC components
 # graph1 = dcc.Graph(figure=fig19)
@@ -111,30 +110,53 @@ fig19 = px.bar(forecasting_ai_melted, x = 'Year', y = 'GenAI Value')
 # if __name__ == '__main__':
 #     app.run_server(debug = True)
 
+# app = dash.Dash()
+# server = app.server
+
+
+# app.layout = html.Div([
+#     html.H1('GRAPHS', style={'textAlign': 'center', 'color': '#636EFA'}),
+#     html.Hr(),
+    
+#     html.H2('Outsourcing'),
+#     dcc.Graph(figure=fig1),
+#     dcc.Graph(figure=fig2),
+#     dcc.Graph(figure=fig3),
+    
+#     html.Hr(),
+    
+#     html.H2('Revenue Forecast'),
+#     dcc.Graph(figure=fig8),
+#     dcc.Graph(figure=fig9),
+#     dcc.Graph(figure=fig10),
+    
+#     html.Hr(),
+    
+#     html.H2('Investment and Share in South Africa'),
+#     dcc.Graph(figure=fig15),
+#     dcc.Graph(figure=fig16),
+    
+#     html.Hr(),
+    
+#     html.H2('Market Share'),
+#     dcc.Graph(figure=fig17),
+#     dcc.Graph(figure=fig18),
+    
+#     html.Hr(),
+    
+#     html.H2('Generative AI Forecast'),
+#     dcc.Graph(figure=fig19)
+# ])
+# if __name__ == '__main__':
+#     app.run_server(debug = True)
 app = dash.Dash()
 server = app.server
-
 
 app.layout = html.Div([
     html.H1('GRAPHS', style={'textAlign': 'center', 'color': '#636EFA'}),
     html.Hr(),
     
-    html.H2('Outsourcing'),
-    dcc.Graph(figure=fig1),
-    dcc.Graph(figure=fig2),
-    dcc.Graph(figure=fig3),
-    
-    html.Hr(),
-    
-    html.H2('Revenue Forecast'),
-    dcc.Graph(figure=fig8),
-    dcc.Graph(figure=fig9),
-    dcc.Graph(figure=fig10),
-    
-    html.Hr(),
-    
     html.H2('Top AI Companies'),
-    dcc.Graph(figure=fig14),
     dcc.Graph(figure=fig15),
     dcc.Graph(figure=fig16),
     
@@ -147,7 +169,24 @@ app.layout = html.Div([
     html.Hr(),
     
     html.H2('Generative AI Forecast'),
-    dcc.Graph(figure=fig19)
+    dcc.Graph(figure=fig19),
+    html.Hr(),
+    
+    html.H2('Outsourcing'),
+    dcc.Graph(figure=fig1),
+    dcc.Graph(figure=fig2),
+    
+    html.Hr(),
+    
+    html.H2('Revenue Forecast'),
+    dcc.Graph(figure=fig8),
+    dcc.Graph(figure=fig9),
+    dcc.Graph(figure=fig10),
+    dcc.Graph(figure=fig11),
+
+    html.Hr(),
+    
 ])
+
 if __name__ == '__main__':
     app.run_server(debug = True)
