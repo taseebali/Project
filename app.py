@@ -47,6 +47,14 @@ outsourcing_fixed.to_csv('./data/fixed_outsourcing.csv', index=False)
 forecasting_ai_melted = pd.melt(forecasting_ai, id_vars=['Area'], var_name='Year', value_name='GenAI Value')
 forecasting_ai_melted = forecasting_ai_melted.drop('Area', axis=1)
 
+# Process revenue forecast
+rf_melted = revenue_forecast.melt(id_vars=['area'], var_name='years', value_name="values")
+rf_pivoted = rf_melted.pivot(index="years", columns="area", values="values")
+rf_pivoted.columns = rf_pivoted.columns.get_level_values(0)
+rf_pivoted = rf_pivoted.reset_index()
+rf_pivoted.columns.name = None
+rf_pivoted.columns = rf_pivoted.columns.str.lower().str.replace(' ', '').str.replace('-', '')
+
 # Create figures
 fig1 = px.bar(outsourcing_fixed, x="area", y="insource", title="Insourcing in each area")
 outsourcing_fixed1 = outsourcing_fixed.sort_values(by="outsource", ascending=True)
@@ -56,14 +64,6 @@ fig4 = px.line(outsourcing_fixed, x="area", y=["insource"], title="Insourcing in
 fig5 = px.line(outsourcing_fixed1, x="area", y=["outsource"], title="Outsourcing in each area")
 fig6 = px.scatter(outsourcing_fixed, x="area", y="insource")
 fig7 = px.scatter(outsourcing_fixed1, x="area", y="outsource")
-
-# Process revenue forecast
-rf_melted = revenue_forecast.melt(id_vars=['area'], var_name='years', value_name="values")
-rf_pivoted = rf_melted.pivot(index="years", columns="area", values="values")
-rf_pivoted.columns = rf_pivoted.columns.get_level_values(0)
-rf_pivoted = rf_pivoted.reset_index()
-rf_pivoted.columns.name = None
-rf_pivoted.columns = rf_pivoted.columns.str.lower().str.replace(' ', '').str.replace('-', '')
 
 fig8 = px.bar(rf_pivoted, x="years", y="itadministrationoutsourcing", text="itadministrationoutsourcing", title="IT Administration Outsourcing forecast")
 fig9 = px.bar(rf_pivoted, x="years", y="itapplicationoutsourcing", text="itapplicationoutsourcing", title="IT Application Outsourcing forecast")
@@ -77,8 +77,7 @@ fig15 = px.bar(simplified_investment, x="year", y="total_investment(in Millions)
 fig16 = px.bar(account_share, x='brand', y='sharepercentage', title='Percentage Share of brands in South Africa', range_y=[0, 80], text="sharepercentage")
 
 # Random colors for brands
-brand_colors = {brand: f'rgba({np.random.randint(0, 256)}, {np.random.randint(0, 256)}, {np.random.randint(0, 256)}, 0.8)' for brand in account_share['brand'].unique()}
-fig17 = px.bar(account_share[account_share['market'].isin(['generative AI(text)', 'generative AI(image)'])], x='brand', y='sharepercentage', title='Share Percentage of Brands that are working with AI in South Africa', color='brand', color_discrete_map=brand_colors, range_y=[0, 80], text="sharepercentage")
+fig17 = px.bar(account_share[account_share['market'].isin(['generative AI(text)', 'generative AI(image)'])], x='brand', y='sharepercentage', title='Share Percentage of Brands that are working with AI in South Africa', color='brand', range_y=[0, 80], text="sharepercentage")
 fig18 = px.treemap(
     account_share,
     path=['market', 'brand'],
@@ -94,61 +93,7 @@ fig18.update_traces(hovertemplate="<br>Share: %{value}%<br>")
 fig18.update_layout(margin=dict(t=50, l=25, r=25, b=25))
 fig19 = px.bar(forecasting_ai_melted, x = 'Year', y = 'GenAI Value', text = 'GenAI Value')
 
-# # DCC components
-# graph1 = dcc.Graph(figure=fig19)
-# graph2 = dcc.Graph(figure=fig18)
 
-# # Create Dash app
-# app = dash.Dash()
-# server = app.server
-# app.layout = html.Div([
-#     html.H1('GRAPHS', style={'textAlign': 'center', 'color': '#636EFA'}),
-#     graph1,
-#     graph2
-# ])
-
-# if __name__ == '__main__':
-#     app.run_server(debug = True)
-
-# app = dash.Dash()
-# server = app.server
-
-
-# app.layout = html.Div([
-#     html.H1('GRAPHS', style={'textAlign': 'center', 'color': '#636EFA'}),
-#     html.Hr(),
-    
-#     html.H2('Outsourcing'),
-#     dcc.Graph(figure=fig1),
-#     dcc.Graph(figure=fig2),
-#     dcc.Graph(figure=fig3),
-    
-#     html.Hr(),
-    
-#     html.H2('Revenue Forecast'),
-#     dcc.Graph(figure=fig8),
-#     dcc.Graph(figure=fig9),
-#     dcc.Graph(figure=fig10),
-    
-#     html.Hr(),
-    
-#     html.H2('Investment and Share in South Africa'),
-#     dcc.Graph(figure=fig15),
-#     dcc.Graph(figure=fig16),
-    
-#     html.Hr(),
-    
-#     html.H2('Market Share'),
-#     dcc.Graph(figure=fig17),
-#     dcc.Graph(figure=fig18),
-    
-#     html.Hr(),
-    
-#     html.H2('Generative AI Forecast'),
-#     dcc.Graph(figure=fig19)
-# ])
-# if __name__ == '__main__':
-#     app.run_server(debug = True)
 app = dash.Dash()
 server = app.server
 
@@ -171,7 +116,7 @@ app.layout = html.Div([
     html.H2('Generative AI Forecast'),
     dcc.Graph(figure=fig19),
     html.Hr(),
-    
+
     html.H2('Outsourcing'),
     dcc.Graph(figure=fig1),
     dcc.Graph(figure=fig2),
